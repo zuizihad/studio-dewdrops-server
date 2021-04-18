@@ -72,12 +72,11 @@ client.connect(err => {
                 res.send(documents);
             })
     })
-    app.post('/setOrderStatus', (req, res) => {
-        const newStatus = req.body.status;
-        console.log(newStatus)
-        OrderCollection.updateOne({ status: newStatus })
-            .toArray((err, documents) => {
-                res.send(documents.length > 0)
+    app.patch('/update:id', (req, res) => {
+        OrderCollection.updateOne({ _id: ObjectID(req.params.id) },
+            { $set: { status: req.body.status } })
+            .then((result) => {
+                console.log(result)
             })
     })
     app.post('/addReview', (req, res) => {
